@@ -37,8 +37,9 @@ IncrLexLevelDbTable::IncrLexLevelDbTable(void)
 
     // Prepare DB configuration
     options.create_if_missing = true;
-    options.filter_policy = leveldb::NewBloomFilterPolicy(10);
-    options.block_cache = leveldb::NewLRUCache(10 * 1048576);  // 10 MB for cache
+    options.max_open_files = 20;
+    options.filter_policy = leveldb::NewBloomFilterPolicy(1);
+    options.block_cache = leveldb::NewLRUCache(0.5 * 1048576);  // 0.5 MB for cache
     db = NULL;
     dbName = "";
 }
