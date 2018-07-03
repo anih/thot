@@ -32,9 +32,9 @@ along with this program; If not, see <http://www.gnu.org/licenses/>.
 LevelDbNgramTable::LevelDbNgramTable(void)
 {
     options.create_if_missing = true;
-    options.max_open_files = 4000;
-    options.filter_policy = leveldb::NewBloomFilterPolicy(48);  // Use index store in memory to reduce number of disk operations
-    options.block_cache = leveldb::NewLRUCache(100 * 1048576);  // 100 MB for cache
+    options.max_open_files = 20;
+    options.filter_policy = leveldb::NewBloomFilterPolicy(4);  // Use index store in memory to reduce number of disk operations
+    options.block_cache = leveldb::NewLRUCache(0.5 * 1048576);  // 100 MB for cache
     db = NULL;
     dbName = "";
     // Key for null info - use the maximum allowed value as the key

@@ -33,7 +33,7 @@ LevelDbPhraseTable::LevelDbPhraseTable(void)
     options.create_if_missing = true;
     options.max_open_files = 20;
     options.filter_policy = leveldb::NewBloomFilterPolicy(1);
-    options.block_cache = leveldb::NewLRUCache(0.5 * 1048576);  // 100 MB for cache
+    options.block_cache = leveldb::NewLRUCache(0.5 * 1048576);  // 0.5 MB for cache
     db = NULL;
     dbName = "";
 }
