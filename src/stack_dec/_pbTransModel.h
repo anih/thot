@@ -1553,12 +1553,16 @@ void _pbTransModel<HYPOTHESIS>::printHyp(const Hypothesis& hyp,
       // Obtain target string vector
   std::vector<std::string> trgStrVec=trgIndexVectorToStrVector(hyp.getPartialTrans());
 
+      // Start json printing
+  outS << "{";
+
       // Print score
-  outS <<"Score: "<<hyp.getScore()<<" ; ";
+  outS << "\"score\": " << hyp.getScore() << ", ";
 
       // Print weights
+  outS << "\"weights\": \"";
   this->printWeights(outS);
-  outS <<" ; ";
+  outS <<"\", ";
 
       // Obtain null hypothesis score components
   Hypothesis nullHyp;
@@ -1572,15 +1576,18 @@ void _pbTransModel<HYPOTHESIS>::printHyp(const Hypothesis& hyp,
   this->incrScore(nullHyp,hypDataType,auxHyp,extScoreComponents);
 
       // Print score components
+  outS << "\"score_components\": \"";
   for(unsigned int i=0;i<extScoreComponents.size();++i)
     outS<<nullHypScoreComponents[i]+extScoreComponents[i]<<" ";
+  outS << "\", ";
 
       // Print score + heuristic
   addHeuristicToHyp(auxHyp);
-  outS <<"; Score+heur: "<<auxHyp.getScore()<<" ";
-    
-      // Print warning if the alignment is not complete
-  if(!this->isComplete(hyp)) outS<< "; Incomplete_alignment!";
+  outS << "\"score_plus_heuristic\": " << auxHyp.getScore() << ", ";
+
+      // Print if the alignment is complete or not
+  if (this->isComplete(hyp)) outS << "\"complete_alignment\": true, ";
+  else outS << "\"complete_alignment\": false, ";
 
       // Obtain phrase alignment
   SourceSegmentation sourceSegmentation;
@@ -1590,12 +1597,13 @@ void _pbTransModel<HYPOTHESIS>::printHyp(const Hypothesis& hyp,
   this->getPhraseAlignment(amatrix,sourceSegmentation,targetSegmentCuts);
 
       // Print target translation
-  outS<<" | ";
+  outS << "\"translation\": \"";
   for(unsigned int i=1;i<trgStrVec.size();++i)
     outS<<trgStrVec[i]<<" ";
+  outS << "\", ";
 
       // Print source segmentation
-  outS << "| Source Segmentation: ";
+  outS << "\"src_segmentation\": \"";
   for(unsigned int k=0;k<sourceSegmentation.size();k++)
   {
     outS<<"( "<<sourceSegmentation[k].first<<" , "<<sourceSegmentation[k].second<<" ; type: ";
@@ -1619,17 +1627,19 @@ void _pbTransModel<HYPOTHESIS>::printHyp(const Hypothesis& hyp,
     }
     outS<<" ) ";
   }
+  outS << "\", ";
 
       // Print target segmentation
-  outS<< "| Target Segmentation: ";
+  outS << "\"dst_segmentation\": \"";
   for (unsigned int j=0; j<targetSegmentCuts.size(); j++)
     outS << targetSegmentCuts[j] << " ";
+  outS << "\", ";
   
       // Print hypothesis key
-  outS<<"| hypkey: "<<hyp.getKey()<<" ";
+  outS << "\"hypkey\": \"" << hyp.getKey() << "\", ";
 
       // Print hypothesis equivalence class
-  outS<<"| hypEqClass: "<<hyp.getEqClass()<<std::endl;
+  outS << "\"hypEqClass\": \"" << hyp.getEqClass() << "\"}" << std::endl;
 
   if(verbose)
   {
