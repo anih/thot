@@ -42,6 +42,8 @@ along with this program; If not, see <http://www.gnu.org/licenses/>.
 
 //--------------- Constants ------------------------------------------
 
+#define FEAT_CUSTOM_SCORE_SMOOTH         0
+
 //--------------- Classes --------------------------------------------
 
 //--------------- DictFeat class
@@ -217,12 +219,12 @@ Score DictFeat<SCORE_INFO>::scorePhrasePairUnweighted(const std::vector<std::str
 {
   Dict::const_iterator dictIter=dict.find(srcPhrase);
   if(dictIter==dict.end())
-    return FEAT_LGPROB_SMOOTH; 
+    return FEAT_CUSTOM_SCORE_SMOOTH; 
   else
   {
     TransOptions::const_iterator trOptIter=dictIter->second.find(trgPhrase);
     if(trOptIter==dictIter->second.end())
-      return FEAT_LGPROB_SMOOTH;
+      return FEAT_CUSTOM_SCORE_SMOOTH;
     else
       return trOptIter->second;
   }
