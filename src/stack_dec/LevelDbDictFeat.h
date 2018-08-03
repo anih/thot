@@ -141,7 +141,7 @@ Score LevelDbDictFeat<SCORE_INFO>::scorePhrasePairUnweighted(const std::vector<s
   if(found)
     return scr;
   else
-    return FEAT_LGPROB_SMOOTH; 
+    return FEAT_CUSTOM_SCORE_SMOOTH; 
 }
 
 //---------------------------------
